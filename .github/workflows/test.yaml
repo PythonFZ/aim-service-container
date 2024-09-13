@@ -21,7 +21,7 @@ jobs:
       # Label used to access the service container
       aim:
         # Docker Hub image
-        image: pythonf/aim
+        image: pythonf/aim:v3.24.0
         options: >-
           --health-cmd="curl --fail http://localhost:43800/status || exit 1"
           --health-interval=10s
