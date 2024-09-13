@@ -19,7 +19,7 @@ jobs:
 
     services:
       # Label used to access the service container
-      mlflow:
+      aim:
         # Docker Hub image
         image: pythonf/aim
         options: >-
