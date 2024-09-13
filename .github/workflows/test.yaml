@@ -1,0 +1,44 @@
+# This workflow will install Python dependencies, run tests
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: tests
+
+on:
+  push:
+
+jobs:
+  pytest:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.11"
+        os:
+          - ubuntu-latest
+
+    services:
+      # Label used to access the service container
+      mlflow:
+        # Docker Hub image
+        image: pythonf/aim
+        options: >-
+          --health-cmd="curl --fail http://localhost:53800/status || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        ports:
+          - 5000:5000
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install aim
+        run: |
+          pip install aim
+      - name: test container
+        run: |
+          python test_connection.py
